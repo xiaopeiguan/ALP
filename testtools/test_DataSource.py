@@ -28,14 +28,13 @@ class Test_datasource(unittest.TestCase):
                 Credit.credit(name=name, card=card, tel=tel, channel=channel)  # 额度申请
             else:
                 Credit.credittimes(name=name, tel=tel, channel=channel)  # 二次额度申请
-            time.sleep(10)
         elif process=='Loan':
             ChangeEngine.changeLoanEngine(channel=channel, engine=engine)  # 修改提现引擎
             alreadybandbankcard = Mysql.selectwithparams(business,'select count(*) from mag_bank_info where customer_id=(select id from mag_customer where tel=%s)', tel)[0]
             if alreadybandbankcard == '0':
                 Loan.bankcard(tel=tel, channel=channel)
             Loan.loan(tel=tel, periods=periods, amount=amount, channel=channel)  # 提现申请
-            time.sleep(10)
+        time.sleep(10)
         print('引擎报告'.center(60,'*'))
         GetResult.getruleresult(process=process, tel=tel, engine=engine)   # 获取引擎报告
         print('mongo库integrationMessage表存储的三方数据'.center(50, '*'))

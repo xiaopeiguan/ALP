@@ -70,7 +70,7 @@ class MongoDB():
             creditRequestParam = result.get('creditRequestParam')
             data = creditRequestParam.get('data')
             print(result)
-            print('业务系统加工入引擎的业务字段:'.center(30, '*'))
+            print('业务系统加工入引擎业务字段:'.center(30, '*'))
             print(creditRequestParam, '\n')
             for GRXX in GRXXlist:
                 if GRXX not in data.keys():
@@ -80,6 +80,8 @@ class MongoDB():
                     print(GRXX + ' 字段值：', GRXXvalue)
         else:
             print('mongo库无查询结果')
+
+
 
 
 if __name__ =='__main__':
