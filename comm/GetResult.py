@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from comm import Mysql
 import Env
-import alpbusinessprocesse.RequestDataSql as RequestDataSql
+import alpbusiness.RequestDataSql as RequestDataSql
 import json
 
 # 读取数据库信息
@@ -52,12 +52,10 @@ def getloanresult(tel):
 def getruleresult(process, tel,engine):
     params = (tel, engine)
     if process == 'Credit':
-        rulehaserror = 1
         sql = 'select risk_state from mag_risk_info where customer_id=(select id from mag_customer where tel=%s) and risk_num=%s order by create_time desc limit 1'
         risk_state = Mysql.selectwithparams(business, sql, params)[0]
         if risk_state == '0' or risk_state == '4':
             print('风控异常了，看下日志吧')
-            return rulehaserror
         else:
             sql1 = 'select pid from mag_risk_info where customer_id=(select id from mag_customer where tel=%s) and risk_num=%s order by create_time desc limit 1'
             pid = Mysql.selectwithparams(business, sql1, params)[0]
@@ -72,8 +70,6 @@ def getruleresult(process, tel,engine):
                 sql3 = 'select name, remark from zw_resultset_list where resultset_id=%s'
                 name, remark = Mysql.selectwithparams(rule, sql3, id)[0], Mysql.selectwithparams(rule, sql3, id)[1]
                 print('用户申请被 (' + name + ' ' + remark + ') 拒绝')
-            rulehaserror = 0
-            return rulehaserror
     elif process == 'Loan':
         sql4 = 'select pid from mag_risk_info where customer_id=(select id from mag_customer where tel=%s) and risk_num=%s order by create_time desc limit 1'
         pid = Mysql.selectwithparams(business, sql4, params)[0]

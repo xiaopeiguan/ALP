@@ -38,6 +38,7 @@ class MysqlDB():
                 return result2
             elif count == 0:
                 print(sql + '没有符合条件的查询数据')
+                return None
         except:
             print(sql + '查询异常，清查看异常原因')
             traceback.print_exc()
@@ -66,6 +67,7 @@ class MysqlDB():
         except:
             print('查询异常，请查看异常原因')
             traceback.print_exc()
+            return None
         finally:
             cursor.close()
             MysqlDB().conn(mysqlname).close()

@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from alpbusinessprocesse import Credit, Loan
+from alpbusiness import Credit, Loan
 from comm import ChangeEngine, GetResult, Mongo, Mysql
-import alpbusinessprocesse.RequestDataSql as RequestDataSql
+import alpbusiness.RequestDataSql as RequestDataSql
 from apibase import JCapi
 import unittest, time, Env
 # 读取数据库信息
@@ -30,11 +30,10 @@ class Test_datasource(unittest.TestCase):
             Credit.credittimes(name=name, tel=tel, channel=channel)  # 再次额度申请
         time.sleep(15)
         print('引擎报告'.center(60,'*'))
-        rulehaserror = GetResult.getruleresult(process='Credit', tel=tel, engine=engine)   # 获取引擎报告
-        if rulehaserror == 0:
-            print('mongo库integrationMessage表存储的三方数据'.center(60, '*'))
-            Mongo.get_thirdpartydata(apiName=apiName, phone=tel)  # 获取mongo库integrationMessage表存储的三方数据
-            Mongo.update_thirdpartydata(apiName=apiName, phone=tel)  # 将mongo库三方数据有效期改为0
+        GetResult.getruleresult(process='Credit', tel=tel, engine=engine)   # 获取引擎报告
+        print('mongo库integrationMessage表存储的三方数据'.center(60, '*'))
+        Mongo.get_thirdpartydata(apiName=apiName, phone=tel)  # 获取mongo库integrationMessage表存储的三方数据
+        Mongo.update_thirdpartydata(apiName=apiName, phone=tel)  # 将mongo库三方数据有效期改为0
 
     '''提现申请，获取引擎报告，获取mongo库存储的三方数据'''
     def test_002(self):

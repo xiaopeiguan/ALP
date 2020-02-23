@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from alpbusinessprocesse import Credit, Loan
+from alpbusiness import Credit, Loan
 from comm import ChangeEngine, GetResult, Mongo, Mysql
-import alpbusinessprocesse.RequestDataSql as RequestDataSql
+import alpbusiness.RequestDataSql as RequestDataSql
 from apibase import JCapi
 import unittest, time, Env
 # 读取数据库信息
