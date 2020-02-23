@@ -14,7 +14,7 @@ tel, name, card = '13000000001', '用户', '110101190202174170'
 channel = 'Android'  # 申请渠道：Android, IOS
 engine = '386'
 periods, amount = '6', '100'  # 借款信息
-applyno, prepayAmt, repayresult = '', '', 'S'   # 还款信息
+applyno, prepayAmt = '', ''  # 还款信息
 
 class Test_Business(unittest.TestCase):
     '''清除用户信息'''
@@ -45,7 +45,7 @@ class Test_Business(unittest.TestCase):
 
     '''提前还款'''
     def test_007(self):
-        Repay.advancerepay(tel, applyno, prepayAmt, repayresult)
+        Repay.advancerepay(tel, applyno, prepayAmt, repayresult='S')
 
     '''修改授信引擎'''
     def test_008(self):

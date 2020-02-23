@@ -10,12 +10,11 @@ business, platform, rule = Env.env()[2], Env.env()[3], Env.env()[4]
 # 定义mysql数据库封装类对象
 Mysql, Mongo = Mysql.MysqlDB(), Mongo.MongoDB()
 
-tel = '13000000001'
-name = '用户1'
-card = '110101190202174170'
+tel, name, card = '13000000001', '用户1', '110101190202174170'
 channel = 'Android'  # 申请渠道：Android, IOS
 engine = '386'
 periods, amount = '6', '100'
+process = 'Loan'
 GRXXlist=['GRXX1007', 'GRXX1002', 'GRXX1111']
 
 class Test_GRXX(unittest.TestCase):
