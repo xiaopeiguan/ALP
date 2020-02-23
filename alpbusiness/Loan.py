@@ -2,17 +2,15 @@
 # -*- coding: utf-8 -*-
 import apibase.Appapi as Appapi
 import apibase.JCapi as JCapi
-from comm import Mysql, ChangeEngine, GetResult
+from comm import Mysql, ChangeEngine, GetResult, Mongo
 import alpbusiness.RequestDataSql as RequestDataSql
 import json, time, datetime, random, string
 import Env
 
 # 读取数据库信息
-business = Env.env()[2]
-platform = Env.env()[3]
-rule = Env.env()[4]
+business, platform, rule = Env.env()[2], Env.env()[3], Env.env()[4]
 # 定义mysql数据库封装类对象
-Mysql = Mysql.MysqlDB()
+Mysql, Mongo = Mysql.MysqlDB(), Mongo.MongoDB()
 
 
 def login(tel, channel):
@@ -93,7 +91,7 @@ def changeloaninfo(tel, loanresult):
                 state3 = Mysql.selectwithparams(business, RequestDataSql.getloanstate, tel)[0]
                 if state3 !='6':
                     print('放款成功可能没有回调，看下日志吧')
-                elif state3 =='6':
+                else:
                     # 修改mysql库借据申请时间
                     yesterday = datetime.datetime.today() - datetime.timedelta(days=1)
                     newcreatetime = datetime.datetime.strftime(yesterday, '%Y%m%d%H%M%S')
@@ -105,7 +103,7 @@ def changeloaninfo(tel, loanresult):
                     JCapi.JCsetCurrentDate(date)
                     # 跑批
                     JCapi.JCrunAll()
-            elif state2 =='6':
+            else:
                 # 修改mysql库借据申请时间
                 yesterday = datetime.datetime.today() - datetime.timedelta(days=1)
                 newcreatetime = datetime.datetime.strftime(yesterday, '%Y%m%d%H%M%S')
@@ -117,9 +115,20 @@ def changeloaninfo(tel, loanresult):
                 JCapi.JCsetCurrentDate(date)
                 # 跑批
                 JCapi.JCrunAll()
-        if loanresult == 'F':
+        elif loanresult == 'F':
             # 调锦程葵花宝典为放款失败
             JCapi.JCsetLoanStatusF(applyno)
+            time.sleep(60)
+            state4 = Mysql.selectwithparams(business, RequestDataSql.getloanstate, tel)[0]
+            if state4 == '5':
+                print('放款失败回调成功')
+            else:
+                time.sleep(65)
+                state5 = Mysql.selectwithparams(business, RequestDataSql.getloanstate, tel)[0]
+                if state5 == '5':
+                    print('放款失败回调成功')
+                else:
+                    print('放款失败可能没有回调，看下日志吧')
         else:
             print('放款回调结果输入错误')
     else:

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from alpbusiness import Credit, Loan
+from alpbusiness import Credit, Loan, Repay
 from comm import ChangeEngine, GetResult, Mongo, Mysql, CheckMysqlData
 import alpbusiness.RequestDataSql as RequestDataSql
 from apibase import JCapi
@@ -10,12 +10,11 @@ business, platform, rule = Env.env()[2], Env.env()[3], Env.env()[4]
 # 定义mysql数据库封装类对象
 Mysql, Mongo = Mysql.MysqlDB(), Mongo.MongoDB()
 
-tel = '13000000001'
-name = '用户'
-card = '110101190202174170'
+tel, name, card = '13000000001', '用户', '110101190202174170'
 channel = 'Android'  # 申请渠道：Android, IOS
 engine = '386'
-periods, amount = '6', '100'
+periods, amount = '6', '100'  # 借款信息
+applyno, prepayAmt, repayresult = '', '', 'S'   # 还款信息
 
 class Test_Business(unittest.TestCase):
     '''清除用户信息'''
@@ -44,15 +43,19 @@ class Test_Business(unittest.TestCase):
         Loan.loan(tel=tel, periods=periods, amount=amount, channel=channel)
         Loan.changeloaninfo(tel=tel, loanresult='S')  # S 放款成功变，更借据数据，能它能够还款； F 放款失败
 
-    '''修改授信引擎'''
+    '''提前还款'''
     def test_007(self):
+        Repay.advancerepay(tel, applyno, prepayAmt, repayresult)
+
+    '''修改授信引擎'''
+    def test_008(self):
         ChangeEngine.changeCreditEngine(channel=channel, engine1=engine, engine2='344', engine3='345')
 
     '''修改提现引擎'''
-    def test_008(self):
+    def test_009(self):
         ChangeEngine.changeLoanEngine(channel=channel, engine=engine)
 
     '''校验数据落库'''
-    def test_009(self):
+    def test_010(self):
         CheckMysqlData.MysqlData(tel)
 

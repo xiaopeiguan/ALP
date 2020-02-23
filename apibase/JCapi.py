@@ -21,7 +21,7 @@ def JCsetCurrentDate(date):
     url = JChost + '/setCurrentDate/' + date
     req = urllib.request.Request(url)
     response = urllib.request.urlopen(req).read().decode('utf-8')
-    print(response)
+    print('锦程', response)
 
 
 # 根据姓名删除锦程额度

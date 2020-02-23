@@ -8,12 +8,9 @@ import json, time, datetime, random, string
 import Env
 
 # 读取数据库信息
-business = Env.env()[2]
-platform = Env.env()[3]
-rule = Env.env()[4]
+business, platform, rule = Env.env()[2], Env.env()[3], Env.env()[4]
 # 定义mysql数据库封装类对象
-Mysql = Mysql.MysqlDB()
-Mongo = Mongo.MongoDB()
+Mysql, Mongo = Mysql.MysqlDB(), Mongo.MongoDB()
 
 # 注册
 def register(tel, channel):

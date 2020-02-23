@@ -54,7 +54,7 @@ class MongoDB():
         #  修改集合中所有满足条件的文档：multi: true
         result = collection.find({"apiName": apiName, "input.phone": phone})
         if result !=None:
-            collection.update({"apiName": apiName, "input.phone": phone}, {'$set': {'effectiveTime': 0}}, multi=True)
+            collection.update_one({"apiName": apiName, "input.phone": phone}, {'$set': {'effectiveTime': 0}}, multi=True)
             print('将Mongo库中三方数据有效期改为0')
         else:
             print('mongo库无查询结果')

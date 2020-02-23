@@ -13,15 +13,15 @@ requestType = 'data'
 # 打印接口调用结果
 def apiprint(name, data, r):
     print(name)
-    # print(data)
+    print(data)
     print(r.text)
-    retCode = json.loads(r.text)['retCode']
-    if retCode == 'SUCCESS':
-        print('接口调用SUCCESS')
-    elif retCode == 'JC_SUCCESS':
-        print('调用锦程接口SUCCESS')
-    else:
-        print('接口调用FAIL')
+    # retCode = json.loads(r.text)['retCode']
+    # if retCode == 'SUCCESS':
+    #     print('接口调用SUCCESS')
+    # elif retCode == 'JC_SUCCESS':
+    #     print('调用锦程接口SUCCESS')
+    # else:
+    #     print('接口调用FAIL')
     # print('\n')
 
 
@@ -322,7 +322,7 @@ def partRepayTry(data):
 
 # 线上还款接口
 def directRepay(data):
-    url = host + 'repay/directRepay'
+    url = host + '/repay/directRepay'
     r = RequestMethodJC.sendrequest(s, url, method, requestType, data)
     return r
 

@@ -27,11 +27,11 @@ class Test_datasource(unittest.TestCase):
         if alreadyapply == '0':
             Credit.credit(name=name, card=card, tel=tel, channel=channel)  # 额度申请
         else:
-            Credit.credittimes(name=name, tel=tel, channel=channel)  # 再次额度申请
-        time.sleep(15)
+            Credit.credittimes(name=name, tel=tel, channel=channel)  # 二次额度申请
+        time.sleep(10)
         print('引擎报告'.center(60,'*'))
         GetResult.getruleresult(process='Credit', tel=tel, engine=engine)   # 获取引擎报告
-        print('mongo库integrationMessage表存储的三方数据'.center(60, '*'))
+        print('mongo库integrationMessage表存储的三方数据'.center(50, '*'))
         Mongo.get_thirdpartydata(apiName=apiName, phone=tel)  # 获取mongo库integrationMessage表存储的三方数据
         Mongo.update_thirdpartydata(apiName=apiName, phone=tel)  # 将mongo库三方数据有效期改为0
 
@@ -46,10 +46,10 @@ class Test_datasource(unittest.TestCase):
         time.sleep(5)
         print('引擎报告'.center(30, '*'))
         GetResult.getruleresult(process='Loan', tel=tel, engine=engine)   # 获取引擎报告
-        print('mongo库integrationMessage表存储的三方数据'.center(30, '*'))
+        print('mongo库integrationMessage表存储的三方数据'.center(50, '*'))
         Mongo.get_thirdpartydata(apiName=apiName, phone=tel)  # 获取mongo库integrationMessage表存储的三方数据
         Mongo.update_thirdpartydata(apiName=apiName, phone=tel)  # 将mongo库三方数据有效期改为0
-        Loan.changeloaninfo(tel=tel, loanresult='F')
+        Loan.changeloaninfo(tel=tel, loanresult='S')  # 若产生借据则修改借据状态为放款失败
 
     '''清除用户数据'''
     def test_003(self):
