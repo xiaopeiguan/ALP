@@ -10,11 +10,12 @@ business, platform, rule = Env.env()[2], Env.env()[3], Env.env()[4]
 # 定义mysql数据库封装类对象
 Mysql, Mongo = Mysql.MysqlDB(), Mongo.MongoDB()
 
-tel, name, card = '13000000001', '用户', '110101190202174170'
+tel, name, card = '15000000002', '用户3', '110101190202176950'
 channel = 'Android'  # 申请渠道：Android, IOS
 engine = '386'
 periods, amount = '6', '100'  # 借款信息
-applyno, prepayAmt = '', ''  # 还款信息
+applyno, prepayAmt = '20200550041260', '100'  # 还款信息
+GRXXlist=['GRXX1007', 'GRXX1002', 'GRXX1111']
 
 class Test_Business(unittest.TestCase):
     '''清除用户信息'''
@@ -58,4 +59,7 @@ class Test_Business(unittest.TestCase):
     '''校验数据落库'''
     def test_010(self):
         CheckMysqlData.MysqlData(tel)
+
+    def test_011(self):
+        Mongo.get_GRXX(phone=tel, engine=int(engine), GRXXlist=GRXXlist)
 

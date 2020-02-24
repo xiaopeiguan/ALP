@@ -83,4 +83,4 @@ def decrypt():
 
 
 if __name__ == '__main__':
-    md5data('用户1')
+    md5data('用户5')

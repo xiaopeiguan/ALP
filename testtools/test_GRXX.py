@@ -18,7 +18,7 @@ GRXXlist=['GRXX1007', 'GRXX1002', 'GRXX1111']
 process = 'Loan'
 
 class Test_GRXX(unittest.TestCase):
-    '''授信申请，获取入引擎的业务字段'''
+    '''用户申请，获取入引擎的业务字段'''
     def test_GRXX(self):
         if process=='Credit':
             # ChangeEngine.changeCreditEngine(channel=channel, engine1=engine, engine2='344', engine3='345')   # 修改授信引擎
@@ -30,7 +30,8 @@ class Test_GRXX(unittest.TestCase):
             Mongo.get_GRXX(phone=tel, engine=int(engine), GRXXlist=GRXXlist)
         elif process=='Loan':
             # ChangeEngine.changeLoanEngine(channel=channel, engine=engine)   # 修改提现引擎
-            alreadybandbankcard = Mysql.selectwithparams(business,'select count(*) from mag_bank_info where customer_id=(select id from mag_customer where tel=%s)',tel)[0]
+            alreadybandbankcard = Mysql.selectwithparams(business,
+                                                         'select count(*) from mag_bank_info where customer_id=(select id from mag_customer where tel=%s)',tel)[0]
             if alreadybandbankcard == '0':
                 Loan.bankcard(tel=tel, channel=channel)
             Loan.loan(tel=tel, periods=periods, amount=amount, channel=channel)  # 提现申请

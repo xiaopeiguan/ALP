@@ -73,13 +73,17 @@ def loan(tel, periods, amount, channel):
     GetResult.getloanresult(tel)
 
 
-# 变更借据数据，能够继续还款
+# 变更借据数据
 # 调锦程葵花宝典为放款成功 -> 等待借据状态变成‘还款中’ -> 修改mysql库借据申请时间 -> 调锦程葵花宝典修改系统时间为明天 -> 跑批
 def changeloaninfo(tel, loanresult):
     applyno = Mysql.selectwithparams(business, RequestDataSql.selectapplno, tel)[0]
     state1 = Mysql.selectwithparams(business, RequestDataSql.getloanstate, tel)[0]
-    if applyno != None and state1 == '3':
-        print('申请提现成功，借据状态为‘放款中’')
+    if applyno != None and state1 == '1':
+        print('订单审核中')
+    elif applyno != None and state1 == '2':
+        print('订单失效')
+    elif applyno != None and state1 == '3':
+        print('申请提现成功，借据状态为‘放款中’。开始进行放款结果回调...')
         if loanresult =='S':
             # 调锦程葵花宝典为放款成功
             JCapi.JCsetLoanStatusS(applyno)
@@ -92,6 +96,7 @@ def changeloaninfo(tel, loanresult):
                 if state3 !='6':
                     print('放款成功可能没有回调，看下日志吧')
                 else:
+                    print('放款成功已回调，借据状态为‘还款中’')
                     # 修改mysql库借据申请时间
                     yesterday = datetime.datetime.today() - datetime.timedelta(days=1)
                     newcreatetime = datetime.datetime.strftime(yesterday, '%Y%m%d%H%M%S')
@@ -103,7 +108,9 @@ def changeloaninfo(tel, loanresult):
                     JCapi.JCsetCurrentDate(date)
                     # 跑批
                     JCapi.JCrunAll()
+                    print('借据可以进行还款操作了')
             else:
+                print('放款成功已回调，借据状态为‘还款中’')
                 # 修改mysql库借据申请时间
                 yesterday = datetime.datetime.today() - datetime.timedelta(days=1)
                 newcreatetime = datetime.datetime.strftime(yesterday, '%Y%m%d%H%M%S')
@@ -115,6 +122,7 @@ def changeloaninfo(tel, loanresult):
                 JCapi.JCsetCurrentDate(date)
                 # 跑批
                 JCapi.JCrunAll()
+                print('借据可以进行还款操作了')
         elif loanresult == 'F':
             # 调锦程葵花宝典为放款失败
             JCapi.JCsetLoanStatusF(applyno)
@@ -131,26 +139,14 @@ def changeloaninfo(tel, loanresult):
                     print('放款失败可能没有回调，看下日志吧')
         else:
             print('放款回调结果输入错误')
+    elif applyno != None and state1 == '4':
+        print('审批拒绝')
+    elif applyno != None and state1 == '5':
+        print('放款失败')
+    elif applyno != None and state1 == '6':
+        print('申请提现成功，借据状态为‘还款中’')
+    elif applyno != None and state1 == '7':
+        print('借据已结清')
     else:
         print('提现异常了')
-
-
-if __name__ == '__main__':
-    tel = '15652523723'
-    periods = '6'
-    amount = '100'
-    channel = 'Android'   # 申请渠道：Android, IOS, H5暂不支持
-    engine = '343'  # 提现引擎编号
-    # 1、绑卡、设置交易密码
-    # bankcard(tel=tel, channel=channel)
-
-    # 2、修改提现引擎编号
-    # ChangeEngine.changeLoanEngine(channel, engine=engine)
-
-    # 3、提现申请，获取引擎报告
-    # loan(tel=tel, periods=periods, amount=amount, channel=channel)
-    # GetResult.getruleresult(tel=tel, engine=engine)
-
-    # 4、变更借据数据，能它能够今日还款
-    # changeloaninfo(tel=tel, loanresult='S')   # loanresult： S 放款回调成功；F 放款回调失败
 

@@ -266,7 +266,7 @@ def partRepayTrydata(applNo, prepayAmt):
 # 线上还款接口
 def directRepaydata(applNo, prepayAmt):
     directRepaydata = {
-        'data': '{"applNo":"' + applNo + '","repayTyp":"1","periods":"","loanAmt":"' + prepayAmt + '","idNo":""}'}
+        'data': '{"applNo":"' + applNo + '","repayTyp":"1","periods":"","loanAmt":"' + str(prepayAmt) + '","idNo":""}'}
     return directRepaydata
 
 

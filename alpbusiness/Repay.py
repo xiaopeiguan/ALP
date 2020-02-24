@@ -42,14 +42,12 @@ def advancerepay(tel, applyno, prepayAmt, repayresult):
         # 线上还款接口
         r = Appapi.directRepay(RequestDataSql.directRepaydata(applyno, repaymentAmount))
         Appapi.apiprint('线上还款接口', RequestDataSql.directRepaydata(applyno, repaymentAmount), r)
-        code = r.jaon.get('retData').get('code')
+        code = r.json.get('retData').get('code')
         if code == 'E0001':
             if repayresult == 'S':
                 JCapi.JCrepaysetSuccess(applyno, repaymentAmount)  # 还款状态修改为成功等待回调
                 time.sleep(60)
-                state1 = Mysql.selectwithparams(business,
-                                                'select state from mag_repayment_record where appl_no=%s order by create_time desc limit 1',
-                                                applyno)[0]
+                state1 = Mysql.selectwithparams(business,'select state from mag_repayment_record where appl_no=%s order by create_time desc limit 1',applyno)[0]
                 if state1 == '1':
                     print('还款状态修改为成功已回调')
                 else:
@@ -57,9 +55,7 @@ def advancerepay(tel, applyno, prepayAmt, repayresult):
             elif repayresult == 'F':
                 JCapi.JCrepaysetFail(applyno, repaymentAmount)  # 还款状态修改为成功等待回调
                 time.sleep(60)
-                state1 = Mysql.selectwithparams(business,
-                                                'select state from mag_repayment_record where appl_no=%s order by create_time desc limit 1',
-                                                applyno)[0]
+                state1 = Mysql.selectwithparams(business,'select state from mag_repayment_record where appl_no=%s order by create_time desc limit 1',applyno)[0]
                 if state1 == '2':
                     print('还款状态修改为失败已回调')
                 else:
@@ -73,6 +69,6 @@ def advancerepay(tel, applyno, prepayAmt, repayresult):
 if __name__ == '__main__':
     tel ='13000000001'
     prepayAmt ='100'
-    applyno = '20200530041240'
+    applyno = '20200550041260'
     repayresult = 'S'   # S: 还款状态修改为成功等待回调； F: 还款状态修改为失败等待回调
     advancerepay(tel, applyno, prepayAmt, repayresult)

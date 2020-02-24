@@ -34,29 +34,29 @@ class MongoDB():
     def get_thirdpartydata(self, apiName, phone):
         collection = MongoDB().conn('integrationMessage')
         # sort() 方法第一个参数为要排序的字段，第二个字段指定排序规则，1 为升序，-1 为降序，默认为升序
-        result = collection.find({"apiName":apiName,"input.phone":phone}).sort("createDate", -1)[0]
-        if result !=None:
+        try:
+            result = collection.find({"apiName": apiName, "input.phone": phone}).sort("createDate", -1)[0]
             input = result.get('input')
             output = result.get('output')
             datasourceInput = result.get('datasourceInput')
             datasourceOutput = result.get('datasourceOutput')
             # print('三方数据存入mongo库数据:\n', result)
-            print('input内容为:\n', input)
-            # print('output内容为:\n', output)
+            # print('input内容为:\n', input)
+            print('output内容为:\n', output)
             # print('datasourceInput内容为:\n', datasourceInput)
             print('datasourceOutput内容为:\n', datasourceOutput)
-        else:
+        except:
             print('mongo库无查询结果')
 
     # 将mongo库三方数据有效期改为0
     def update_thirdpartydata(self, apiName, phone):
         collection = MongoDB().conn('integrationMessage')
         #  修改集合中所有满足条件的文档：multi: true
-        result = collection.find({"apiName": apiName, "input.phone": phone})
-        if result !=None:
-            collection.update({"apiName": apiName, "input.phone": phone}, {'$set': {'effectiveTime': 0}}, multi=True)
+        try:
+            collection.find({"apiName": apiName, "input.phone": phone})
+            collection.update({"apiName": apiName, "input.phone": phone}, {'$set': {'effectiveTime': 0}},multi=True)
             print('将Mongo库中三方数据有效期改为0')
-        else:
+        except:
             print('mongo库无查询结果')
 
     # 获取业务系统加工入引擎的业务字段
@@ -69,7 +69,7 @@ class MongoDB():
         if result != None:
             creditRequestParam = result.get('creditRequestParam')
             data = creditRequestParam.get('data')
-            print(result)
+            # print(result)
             print('业务系统加工入引擎业务字段:'.center(30, '*'))
             print(creditRequestParam, '\n')
             for GRXX in GRXXlist:
@@ -82,9 +82,4 @@ class MongoDB():
             print('mongo库无查询结果')
 
 
-
-
-if __name__ =='__main__':
-    GRXXlist = ['GRXX1007', 'GRXX1002', 'GRXX1111']
-    MongoDB().get_GRXX('15652523723', 386, GRXXlist)
 
